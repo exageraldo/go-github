@@ -38,26 +38,8 @@ func TestUser_Marshal(t *testing.T) {
 		CreatedAt:       &Timestamp{referenceTime},
 		SuspendedAt:     &Timestamp{referenceTime},
 	}
-	want := `{
-		"login": "l",
-		"id": 1,
-		"avatar_url": "a",
-		"gravatar_id": "g",
-		"name": "n",
-		"company": "c",
-		"blog": "b",
-		"location": "l",
-		"email": "e",
-		"hireable": true,
-		"bio": "b",
-		"twitter_username": "t",
-		"public_repos": 1,
-		"followers": 1,
-		"following": 1,
-		"created_at": ` + referenceTimeStr + `,
-		"suspended_at": ` + referenceTimeStr + `,
-		"url": "u"
-	}`
+	want := `{"login":"l","id":1,"avatar_url":"a","gravatar_id":"g","name":"n","company":"c","blog":"b","location":"l","email":"e","hireable":true,"bio":"b","twitter_username":"t","public_repos":1,"followers":1,"following":1,"created_at":` + referenceTimeStr + `,"suspended_at":` + referenceTimeStr + `,"url":"u"}`
+
 	testJSONMarshal(t, u, want)
 
 	u2 := &User{
@@ -459,10 +441,7 @@ func TestUserContext_Marshal(t *testing.T) {
 		Octicon: String("message"),
 	}
 
-	want := `{
-		"message" : "message",
-		"octicon" : "message"
-	}`
+	want := `{"message":"message","octicon":"message"}`
 
 	testJSONMarshal(t, u, want)
 }
@@ -479,14 +458,7 @@ func TestHovercard_Marshal(t *testing.T) {
 		},
 	}
 
-	want := `{
-		"contexts" : [
-			{
-				"message" : "someMessage",
-				"octicon" : "someOcticon"
-			}
-		]
-	}`
+	want := `{"contexts":[{"message":"someMessage","octicon":"someOcticon"}]}`
 
 	testJSONMarshal(t, h, want)
 }
@@ -502,11 +474,7 @@ func TestUserListOptions_Marshal(t *testing.T) {
 		},
 	}
 
-	want := `{
-		"since" : 1900,
-		"page": 1,
-		"perPage": 10
-	}`
+	want := `{"since":1900,"page":1,"perPage":10}`
 
 	testJSONMarshal(t, u, want)
 }
