@@ -83,46 +83,8 @@ func TestUser_Marshal(t *testing.T) {
 		LdapDn: String("test ldap"),
 	}
 
-	want2 := `{
-		"login": "testLogin",
-		"id": 1,
-		"node_id":"testNode123",
-		"avatar_url": "https://www.my-avatar.com",
-		"html_url":"https://www.test-url.com",
-		"gravatar_id": "testGravatar123",
-		"name": "myName",
-		"company": "testCompany",
-		"blog": "test Blog",
-		"location": "test location",
-		"email": "test@test.com",
-		"hireable": true,
-		"bio": "my good bio",
-		"twitter_username": "https://www.twitter.com/test",
-		"public_repos": 1,
-		"public_gists":2,
-		"followers": 100,
-		"following": 29,
-		"created_at": ` + referenceTimeStr + `,
-		"suspended_at": ` + referenceTimeStr + `,
-		"updated_at": ` + referenceTimeStr + `,
-		"type": "test type",
-		"site_admin": false,
-		"total_private_repos": 2,
-		"owned_private_repos": 1,
-		"private_gists": 1,
-		"disk_usage": 1,
-		"collaborators": 1,
-		"two_factor_authentication": false,
-		"plan": {
-			"name": "silver",
-			"space": 1024,
-			"collaborators": 10,
-			"private_repos": 4,
-			"filled_seats": 24,
-			"seats": 1
-		},
-		"ldap_dn": "test ldap"
-	}`
+	want2 := `{"login":"testLogin","id":1,"node_id":"testNode123","avatar_url":"https://www.my-avatar.com","html_url":"https://www.test-url.com","gravatar_id":"testGravatar123","name":"myName","company":"testCompany","blog":"test Blog","location":"test location","email":"test@test.com","hireable":true,"bio":"my good bio","twitter_username":"https://www.twitter.com/test","public_repos":1,"public_gists":2,"followers":100,"following":29,"created_at":` + referenceTimeStr + `,"updated_at":` + referenceTimeStr + `,"suspended_at":` + referenceTimeStr + `,"type":"test type","site_admin":false,"total_private_repos":2,"owned_private_repos":1,"private_gists":1,"disk_usage":1,"collaborators":1,"two_factor_authentication":false,"plan":{"name":"silver","space":1024,"collaborators":10,"private_repos":4,"filled_seats":24,"seats":1},"ldap_dn":"test ldap"}`
+
 	testJSONMarshal(t, u2, want2)
 }
 
@@ -463,8 +425,10 @@ func TestHovercard_Marshal(t *testing.T) {
 	testJSONMarshal(t, h, want)
 }
 
-func TestUserListOptions_Marshal(t *testing.T) {
-	testJSONMarshal(t, &UserListOptions{}, "{}")
+func TestUserListOptions_addOptions(t *testing.T) {
+	url := "some/path"
+
+	testAddURLOptions(t, url, &UserListOptions{}, url)
 
 	u := &UserListOptions{
 		Since: int64(1900),
@@ -474,23 +438,18 @@ func TestUserListOptions_Marshal(t *testing.T) {
 		},
 	}
 
-	want := `{"since":1900,"page":1,"perPage":10}`
-
-	testJSONMarshal(t, u, want)
+	testAddURLOptions(t, url, u, url+`?page=1&per_page=10&since=1900`)
 }
 
-func TestHovercardOptions_Marshal(t *testing.T) {
-	testJSONMarshal(t, &HovercardOptions{}, "{}")
+func TestHovercardOptions_addOptions(t *testing.T) {
+	url := "some/path"
+
+	testAddURLOptions(t, url, &HovercardOptions{}, url+`?subject_id=&subject_type=`)
 
 	u := &HovercardOptions{
 		SubjectType: "subjectType",
 		SubjectID:   "subjectID",
 	}
 
-	want := `{
-		"SubjectType" : "subjectType",
-		"SubjectID" : "subjectID"
-	}`
-
-	testJSONMarshal(t, u, want)
+	testAddURLOptions(t, url, u, url+`?subject_id=subjectID&subject_type=subjectType`)
 }
